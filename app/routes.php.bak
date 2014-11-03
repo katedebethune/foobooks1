@@ -1,0 +1,87 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the Closure to execute when that URI is requested.
+|
+*/
+
+Route::get('/', function()
+{
+	return View::make('hello');
+});
+
+/*
+Route::get('/books/{category}', function($category) {
+	return 'Here are all the books in the category of '.$category;
+}); */
+
+Route::get('/books/{category?}', function($category = null) {
+	return 'Here are all the books in the category of '.$category;
+});
+
+Route::get('/new', function () {
+	
+		$view = '<form method="POST">';
+		$view .= 'Title: <input type="text" name="title">';
+		$view .= 'ISBN: <input type="text" name="ISBN">';
+		$view .= '<input type="submit">';
+		$view .= '</form>';
+		return $view;
+});
+
+Route::post('/new', function() {
+	
+		$input = Input::all();
+		print_r($input);
+});
+
+
+Route::get('/practice', function() {
+	$fruit = Array('Apples', 'Oranges', 'Pears');
+
+	echo Pre::render($fruit,'Fruit');
+});
+
+Route::get('/book', function() {
+	return ("Version A ");
+});
+Route::post('/book',function() {
+	return ("Version B ");
+});
+Route::post('/practice', function() {
+	echo App::environment();
+});
+
+Route::get('cars', function() {
+	return "Here are all the cars . . .";
+});
+
+Route::get('books/{id}', function($id) {
+	return "You have requested book #".$id;
+});
+
+Route::get('flights/{day_of_week}', function($day_of_week)
+{
+	$days = Array('monday','tuesday','wednesday','thursday','friday','saturday','sunday');
+
+	if(in_array(strtolower($day_of_week), $days)) {
+		return "Here are the flights departing on $day_of_week...";
+	}
+	else {
+		return "Invalid day";
+	}
+});
+
+/*
+Route('/profile/{user_id}', function($user_id) {
+	$user = User::get($user_id);
+
+	return View::make('profile')
+		->with('user', $user);
+}); */
