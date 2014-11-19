@@ -309,6 +309,7 @@ Route::get('/test', function() {
 		} */
 		
 		
+		/* 
 		//1.15 ms
 		//raw sql
 		$sql = 'SELECT * FROM books WHERE author LIKE "%Scott%"';
@@ -318,7 +319,41 @@ Route::get('/test', function() {
 		$books = DB::select($sql);
 		//output
 		echo Pre::render($books, '');	
+		*/
 		
+		//creates an Eloquent collection
+		$collection = Book::all();
+		#outputs json string
+		//echo $collection;
+		# loop through the Collection and access just the data
+		//foreach($collection as $book) {
+    	//	echo $book['title']."<br>";
+		//} 
+		# using object notation
+		//foreach($collection as $book) {
+    	//	echo $book->title."<br>";
+		//}
+		# converting to a "pure" array
+		//var_dump($collection->toArray());
+		//print_r($collection);
+		# ....ELOQUENT METHODS ....#
+		# count method
+		echo $collection->count();
+		# first
+		echo $collection->first();
+		# last
+		echo $collection->last();
+		# shift - get and remove the first itme
+		# pop - get and remove the last itme
+		# each() - loop through each item in a collection
+		# map() - loop through each item in a collection, returning a new collection
+		# filter() - loop through returning t/f, with true retained
+		# sort() - sort through each item with a callback
+		# reverse() - reverses a collection
+		# isEmpty() - determins if collection is empty
+		# toArray() - converts to a "pure" array
+		# toJson() - converts to JSON
+		# count() - returns count of items in collection	
 });
 
 
