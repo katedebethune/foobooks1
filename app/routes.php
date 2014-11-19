@@ -165,7 +165,7 @@ Route::get('/practice-creating', function() {
 	$book->author = 'F. Scott Fitzgerald';
 	$book->published = 1925;
 	$book->cover = 'http://img2.imagesbn.com/p/9780743273565_p0_v4_s114x166.JPG';
-    	$book->purchase_link = 'http://www.barnesandnoble.com/w/the-great-gatsby-francis-scott-fitzgerald/1116668135?ean=9780743273565';
+    $book->purchase_link = 'http://www.barnesandnoble.com/w/the-great-gatsby-francis-scott-fitzgerald/1116668135?ean=9780743273565';
 	$book->page_count = 320;
 
 	$book->save();
@@ -185,9 +185,13 @@ Route::get('/practice-reading', function() {
 
 });
 
+/* lecture 9, pt 2, 11:17 */
 Route::get('/practice-reading-one-book', function() {
 
     $book = Book::where('author', 'LIKE', '%Scott%')->first();
+    //$book = Book::where('author', 'LIKE', '%Scott%')->get();
+    //$book = Book::where('author', 'LIKE', '%Scott%')
+    //->orWhere('author', 'LIKE', '%Maya')->get();
 
     if($book) {
         return $book->title;
@@ -207,7 +211,7 @@ Route::get('/practice-updating', function() {
     if($book) {
 
         # Give it a different title
-        $book->title = 'The Really Great Gatsby';
+        $book->title = 'The Really Really Great Gatsby';
 
         # Save the changes
         $book->save();
@@ -283,6 +287,38 @@ Route::get('/debug', function() {
 
     echo '</pre>';
 
+});
+
+Route::get('/test', function() {
+	# Returns an object of books
+		//1.27 ms
+		/*
+		$books = DB::table('books')->get();
+		
+		foreach ($books as $book) {
+			echo $book->author,"<br>";
+		} */
+		
+		
+		//850 ms
+		/*
+		$books = DB::table('books')->where('author', 'LIKE', '%SCOTT%')->get();
+		
+		foreach ($books as $book) {
+			echo $book->title;
+		} */
+		
+		
+		//1.15 ms
+		//raw sql
+		$sql = 'SELECT * FROM books WHERE author LIKE "%Scott%"';
+		//escape statement
+		$sql = DB::raw($sql);
+		//run query
+		$books = DB::select($sql);
+		//output
+		echo Pre::render($books, '');	
+		
 });
 
 
