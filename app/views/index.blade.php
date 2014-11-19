@@ -20,6 +20,7 @@
 		<input type='submit' value='Search'>
 	</form> -->
 
+	<p>Hi {{ $name }}! Welcome to my app!</p>
 
 	{{ Form::open(array('url' => '/list', 'method' => 'GET')) }}
 	

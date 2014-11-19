@@ -18,12 +18,14 @@ Route::get('/', function() {
 		->with('name', $name);
 }); 
 
+/* All form controls from codebright tutorial */
 Route::get('/form_test', function() 
 {
 	return View::make('form');
 });
 
-
+/* JSON version */
+/* 
 Route::get('/list/{format?}', function($format = 'html') {
 
 	$query = Input::get('query');
@@ -51,6 +53,53 @@ Route::get('/list/{format?}', function($format = 'html') {
 	}
 	
 });
+*/
+
+/* db version -- removing search contained in library class for now */
+Route::get('/list/{format?}', function($format = 'html') {
+
+	//$query = Input::get('query');
+
+	//$library = new Library();
+	//$library->setPath(app_path().'/database/books.json');
+	//$books = $library->getBooks();
+	
+	//if($query) {
+    //    $books = $library->search($query);
+    //}
+
+	//if($format == 'json' ) {
+	//	return 'JSON Version';
+	//}
+	//elseif($format == 'pdf' ) {
+	//	return 'PDF Version';
+	//}
+	//
+	//else {
+	//	return View::make('list')
+	//		->with('name', 'Kate')
+	//		->with('lastname', 'Bassoon')
+	//		->with('books', $books)
+	//		->with('query', $query);
+	//}
+	
+	$books = Book::all();
+	//var_dump($books->all());
+	
+	//$books->each(function($book)
+    //{
+    //    var_dump($book->title);
+    //});
+	
+	return View::make('list')
+		->with('books', $books);
+	
+	//$foods = Food::all();
+	//return View::make('list')
+	//	->with('foods', $foods);
+	
+	
+});
 
 
 
@@ -61,14 +110,46 @@ Route::get('/rabbits', function() {
 
 // Display the form for a new book
 Route::get('/add', function() {
-
+	
+	return View::make('add');
 
 });
 
 // Process form for a new book
+/*
 Route::post('/add', function() {
 
-});
+	#Instantiate new Book model class
+	$book = new Book();
+
+	# Set
+	$book->title = 'Through a Distant Mirror';
+	$book->author = 'Barbara Tuchman';
+	#$book->published = 1925;
+	#$book->cover = 'http://img2.imagesbn.com/p/9780743273565_p0_v4_s114x166.JPG';
+    #$book->purchase_link = 'http://www.barnesandnoble.com/w/the-great-gatsby-francis-scott-fitzgerald/1116668135?ean=9780743273565';
+	#$book->page_count = 320;
+
+	$book->save();
+
+	return 'A new book has been added! Check your database to see . . .';
+
+}); */
+
+/* /add post code from class */
+Route::post('/add', array('before'=>'csrf',
+    function() {
+    
+    var_dump($_POST);
+    
+    $book = new Book();
+    $book->title = $_POST['title'];
+    //$book->title = Input::get('title');
+    
+    $book->save();
+    return Redirect::to('/list');
+    
+}));
 
 // Display the form to edit a book
 Route::get('/edit/{title}', function($title) {
@@ -355,6 +436,46 @@ Route::get('/test', function() {
 		# toJson() - converts to JSON
 		# count() - returns count of items in collection	
 });
+
+Route::get('/practice-creating-food', function() {
+
+	#Instantiate new Book model class
+	$food = new Food();
+
+	# Set
+	$food->name = 'Lentil Soup';
+	$food->description = 'French lentils cooked until just tender with sage, rosemary, and tarragon';
+	$food->sold_by = 'volume';
+	$food->size = '';
+    $food->price = .19;
+
+	$food->save();
+
+	return 'A new food has been added! Check your database to see . . .';
+});
+
+Route::get('/practice-updating-food', function() {
+
+    # First get a book to update
+    $food = Food::where('name', 'LIKE', '%Tomato%')->first();
+
+    # If we found the book, update it
+    if($food) {
+
+        # Give it a different title
+        $food->price = .19;
+
+        # Save the changes
+        $food->save();
+
+        return "Update complete; check the database to see if your update worked...";
+    }
+    else {
+        return "Book not found, can't update.";
+    }
+
+});
+
 
 
 

@@ -27,7 +27,7 @@ class Library {
 
 		// Convert to an array
 		$this->books = json_decode($books, true);
-		print_r($this->books);
+		//print_r($this->books);
 
 		return $this->books;
 	}
